@@ -1,7 +1,9 @@
 from django.urls import path
-from . import views
+from .views import PageViewList, PageViewDetail
 
 urlpatterns = [
-    path('', views.pages, name='pages'),
-    path('<int:page_id>/<slug:page_slug>/', views.page, name='page'),
+    path('', PageViewList.as_view(), name='pages'),
+    # El primary key debe ser modificado para que el parametro recibido es PK
+    # y el nombre de la pagina se debe llamar slug
+    path('<int:pk>/<slug:slug>/', PageViewDetail.as_view(), name='page'),
 ]
