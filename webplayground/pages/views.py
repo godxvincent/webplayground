@@ -1,5 +1,7 @@
 from django.views.generic import ListView, DetailView
+from django.views.generic import CreateView
 from .models import Page
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -21,3 +23,14 @@ class PageViewList(ListView):
 class PageViewDetail(DetailView):
     model = Page
     # Al usar DetailView la clase va a buscar un template con nombre modelo_detail.
+
+
+class PageViewCreate(CreateView):
+    model = Page
+    fields = ['title', 'content', 'order']
+
+    # Esta es una forma de sobre escribir la variable success_url pero para
+    # ahorrase el metodo hay otra forma
+    # def get_success_url(self):
+    #     return reverse('pages:pages')
+    success_url = reverse_lazy('pages:pages')
