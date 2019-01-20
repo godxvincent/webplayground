@@ -39,6 +39,12 @@
                       Acceder
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">
+                      <!-- {# {% if request.user.is_staff %}Admin{% else %}Acceder{% endif %} #} -->
+                      Registro
+                    </a>
+                  </li>
                  {% else %}
                      <li class="nav-item">
                        <a class="nav-link" href="{% url 'logout' %}">
