@@ -1,8 +1,16 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.shortcuts import redirect
 from .models import Page
 from .forms import PageForm
 from django.urls import reverse_lazy
+
+
+class StaffRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if (not request.user.is_staff):
+            return redirect(reverse_lazy('admin:login'))
+        return super(PageViewCreate, self).dispatch(request, *args, **kwargs)
 
 # Create your views here.
 
@@ -26,7 +34,7 @@ class PageViewDetail(DetailView):
     # Al usar DetailView la clase va a buscar un template con nombre modelo_detail.
 
 
-class PageViewCreate(CreateView):
+class PageViewCreate(StaffRequiredMixin, CreateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order']
@@ -38,7 +46,7 @@ class PageViewCreate(CreateView):
     success_url = reverse_lazy('pages:pages')
 
 
-class PageViewUpdate(UpdateView):
+class PageViewUpdate(StaffRequiredMixin, UpdateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order']
@@ -48,6 +56,6 @@ class PageViewUpdate(UpdateView):
         return reverse_lazy('pages:update', args=[self.object.id]) + '?ok'
 
 
-class PageViewDelete(DeleteView):
+class PageViewDelete(StaffRequiredMixin, DeleteView):
     model = Page
     success_url = reverse_lazy('pages:pages')
