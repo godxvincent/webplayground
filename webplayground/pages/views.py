@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView, UpdateView, DeleteView
 from .models import Page
+from .forms import PageForm
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -27,7 +28,8 @@ class PageViewDetail(DetailView):
 
 class PageViewCreate(CreateView):
     model = Page
-    fields = ['title', 'content', 'order']
+    form_class = PageForm
+    # fields = ['title', 'content', 'order']
 
     # Esta es una forma de sobre escribir la variable success_url pero para
     # ahorrase el metodo hay otra forma
@@ -38,7 +40,8 @@ class PageViewCreate(CreateView):
 
 class PageViewUpdate(UpdateView):
     model = Page
-    fields = ['title', 'content', 'order']
+    form_class = PageForm
+    # fields = ['title', 'content', 'order']
     template_name_suffix = '_update_form'
 
     def get_success_url(self):
