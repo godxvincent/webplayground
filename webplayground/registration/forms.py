@@ -14,3 +14,10 @@ class UserCreationFormWithEmail(UserCreationForm):
         fields = ('username',  'email', 'password1', 'password2')
         # Es posible que aqui se sobre escriba el campo widget pero al hacerlo reemplazamos todas las validaciones
         # heredadas del UserCreationForm
+
+    # Sobre escribiendo el metodo clean_email
+    def clean_email(self):
+        emailRecibido = self.cleaned_data.get("email")
+        if (User.objects.filter(email=emailRecibido).exists()):
+            raise forms.ValidationError("El email ya esta registrado, por favor prueba con otro")
+        return emailRecibido
