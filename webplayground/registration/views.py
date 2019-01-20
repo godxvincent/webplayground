@@ -1,7 +1,9 @@
 from .forms import UserCreationFormWithEmail
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from django.urls import reverse_lazy
 from django import forms
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -27,3 +29,8 @@ class SignUpView(CreateView):
         new_form.fields['password2'].widget = forms.PasswordInput(
             attrs={'class': 'form-control mb-2', 'placeholder': 'Repite contraseña'})
         return new_form
+
+
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdate(TemplateView):
+    template_name = 'registration/profile_form.html'

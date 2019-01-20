@@ -47,6 +47,12 @@
                   </li>
                  {% else %}
                      <li class="nav-item">
+                       <a class="nav-link" href="{% url 'profile' %}">
+                         <!-- {# {% if request.user.is_staff %}Admin{% else %}Acceder{% endif %} #} -->
+                         Perfil
+                       </a>
+                     </li>
+                     <li class="nav-item">
                        <a class="nav-link" href="{% url 'logout' %}">
                          <!-- {# {% if request.user.is_staff %}Admin{% else %}Acceder{% endif %} #} -->
                          Salir
