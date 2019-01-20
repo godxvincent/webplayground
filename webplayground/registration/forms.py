@@ -16,6 +16,7 @@ class UserCreationFormWithEmail(UserCreationForm):
         # heredadas del UserCreationForm
 
     # Sobre escribiendo el metodo clean_email
+    # https://docs.djangoproject.com/en/2.0/ref/forms/validation/#cleaning-a-specific-field-attribute
     def clean_email(self):
         emailRecibido = self.cleaned_data.get("email")
         if (User.objects.filter(email=emailRecibido).exists()):
