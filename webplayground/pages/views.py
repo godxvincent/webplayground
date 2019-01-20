@@ -4,13 +4,24 @@ from django.shortcuts import redirect
 from .models import Page
 from .forms import PageForm
 from django.urls import reverse_lazy
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
+
+# Documentación de mixins
+# https://docs.djangoproject.com/en/2.0/topics/class-based-views/mixins/
 
 
 class StaffRequiredMixin(object):
+
+    # Link documentación login required, permission required decorador
+    # https://docs.djangoproject.com/en/2.0/topics/auth/default/#the-login-required-decorator
+    # https://docs.djangoproject.com/en/2.0/topics/auth/default/#the-permission-required-decorator
+    # https://docs.djangoproject.com/en/2.0/_modules/django/contrib/admin/views/decorators/
+    @method_decorator(staff_member_required)
     def dispatch(self, request, *args, **kwargs):
-        if (not request.user.is_staff):
-            return redirect(reverse_lazy('admin:login'))
-        return super(PageViewCreate, self).dispatch(request, *args, **kwargs)
+        # if (not request.user.is_staff):
+        #     return redirect(reverse_lazy('admin:login'))
+        return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 # Create your views here.
 
@@ -34,7 +45,8 @@ class PageViewDetail(DetailView):
     # Al usar DetailView la clase va a buscar un template con nombre modelo_detail.
 
 
-class PageViewCreate(StaffRequiredMixin, CreateView):
+@method_decorator(staff_member_required, name='dispatch')
+class PageViewCreate(CreateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order']
@@ -46,7 +58,8 @@ class PageViewCreate(StaffRequiredMixin, CreateView):
     success_url = reverse_lazy('pages:pages')
 
 
-class PageViewUpdate(StaffRequiredMixin, UpdateView):
+@method_decorator(staff_member_required, name='dispatch')
+class PageViewUpdate(UpdateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order']
@@ -56,6 +69,7 @@ class PageViewUpdate(StaffRequiredMixin, UpdateView):
         return reverse_lazy('pages:update', args=[self.object.id]) + '?ok'
 
 
-class PageViewDelete(StaffRequiredMixin, DeleteView):
+@method_decorator(staff_member_required, name='dispatch')
+class PageViewDelete(DeleteView):
     model = Page
     success_url = reverse_lazy('pages:pages')
