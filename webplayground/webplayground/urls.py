@@ -23,6 +23,7 @@ urlpatterns = [
     # path('page/', include('pages.urls')),
     path('page/', include(page_urlpatterns)),
     path('admin/', admin.site.urls),
+    # Esto no sobre escribe unas URLs sino que adiciona.
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('registration.urls'))
 ]
