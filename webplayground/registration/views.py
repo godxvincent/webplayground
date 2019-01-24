@@ -1,4 +1,4 @@
-from .forms import UserCreationFormWithEmail, ProfileForm
+from .forms import UserCreationFormWithEmail, ProfileForm, EmailForm
 from django.views.generic import CreateView, UpdateView
 from .models import Profile
 from django.urls import reverse_lazy
@@ -16,6 +16,7 @@ class SignUpView(CreateView):
     def get_success_url(self):
         return reverse_lazy('login') + '?registration'
 
+    # Este meodo es para sobre escribir en tiempo de ejecución los widget del form.
     def get_form(self, form=None):
         new_form = super(SignUpView, self).get_form()
         # Los nombres de los campos hay que sacarlos de los nombres que genera automaticamente
@@ -41,3 +42,23 @@ class ProfileUpdate(UpdateView):
     def get_object(self):
         profile, created = Profile.objects.get_or_create(user=self.request.user)
         return profile
+
+
+@method_decorator(login_required, name='dispatch')
+class EmailUpdate(UpdateView):
+    form_class = EmailForm
+    success_url = reverse_lazy('profile')
+    template_name = 'registration/profile_email_form.html'
+
+    def get_object(self):
+        return self.request.user
+
+    def get_form(self, form=None):
+        new_form = super(EmailUpdate, self).get_form()
+        # Los nombres de los campos hay que sacarlos de los nombres que genera automaticamente
+        # Django, por tanto toca entrar en el codigo generado visto a través del navegador
+
+        new_form.fields['email'].widget = forms.EmailInput(
+            attrs={'class': 'form-control mb-2', 'placeholder': 'Email'})
+
+        return new_form
