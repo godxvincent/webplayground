@@ -4,11 +4,20 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 # Create your models here.
 
+# Link custom_upload_to https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.FileField.upload_to
+
+
+def custom_upload_to(instance, filename):
+    old_instanace = Profile.objects.get(pk=instance.pk)
+    old_instanace.avatar.delete()
+    return 'profile/' + filename
+
 
 class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='profile', null=True, blank=True)
+    # Se ha cambiado el directorio por una función
+    avatar = models.ImageField(upload_to=custom_upload_to, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     link = models.URLField(max_length=200, null=True, blank=True)
 
