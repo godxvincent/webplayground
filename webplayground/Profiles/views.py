@@ -8,6 +8,9 @@ from registration.models import Profile
 class ProfileListView(ListView):
     model = Profile
     template_name = 'profiles/profile_list.html'
+    # https://docs.djangoproject.com/en/2.0/topics/pagination/
+    paginate_by = 3
+
 
 class ProfileDetailView(DetailView):
     model = Profile

@@ -21,6 +21,12 @@ class Profile(models.Model):
     bio = models.TextField(null=True, blank=True)
     link = models.URLField(max_length=200, null=True, blank=True)
 
+    # Esto fue agregado porque en la consola sale un warning indicando que los resultados de la paginaciónote
+    # podria ser inesperado debido a que no esta ordenada la querysetself.
+    # Pagination may yield inconsistent results with an un
+    # ordered object_list: <class 'registration.models.Profile'> QuerySet.
+    class Meta:
+        ordering = ['user__username']
 # Esto es una forma de indicarle a django que se eecute algo en respuesta a unos cambios
 # en un modelo como un trigger en django.
 
