@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<style>.errorlist{color:red;} label{display:none}</style>
+<main role="main">
+  <div class="container" >
+     <div class="row">
+             <div class="col-md-2 my-auto">
+                 {% if profile.avatar %}
+                 <img src="{{profile.avatar.url}}" class="img-fluid" >
+                 {% else %}
+                 <img src="{% static 'registration/img/no-avatar.jpg' %}" class="img-fluid">
+                 {% endif %}
+             </div>
+             <div class="col-md-10 my-auto" >
+                 <div class="card border-dark mb-3 w-100 my-auto" >
+                     <div class="card-header">Perfil</div>
+                     <div class="card-body text-dark">
+                         <h5 class="card-title">{{profile.user.username}}</h5>
+                         <p class="card-text">{{profile.bio}}</p>
+                         {% if profile.link %}
+                         <a href="{{ profile.link }}" class="btn btn-dark">Ir a sitio del usuario</a>
+                         {% endif %}
+                     </div>
+                 </div>
+             </div>
+         </div>
+  </div>
+</main>
+
+{% endblock %}

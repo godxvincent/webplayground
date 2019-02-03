@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # la app registration la hemos coloado encima para que tenga prioridad
+    'Profiles',
     'registration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'ckeditor',
-    'pages.apps.PagesConfig'
+    'pages.apps.PagesConfig',
 ]
 
 MIDDLEWARE = [

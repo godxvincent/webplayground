@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Usuarios{% endblock %}
+{% block content %}
+<!-- {# {% include 'pages/includes/pages_menu.html'%} #} -->
+
+<main role="main">
+  <div class="container mb-4">
+    <!-- {# {% for page in pages %} #} -->
+    <!-- El objeto generio que contiene la respuesta del queryset es object_list o
+        page_list -->
+    <div class="card-group">
+        <div class="row">
+            {% for profile in profile_list %}
+                <div class="col-sm-3">
+                    <div class="card " >
+                        <a href="{% url 'profile_detail' profile.user.username %} ">
+                            {% if profile.avatar %}
+                            <!-- <img src="" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;" alt="{{profile.avatar}}" > -->
+                            <!-- rounded img-thumbnail  -->
+                            <img class="card-img-top img-fluid" src="{{profile.avatar.url}}" alt="{{profile.user.username|slugify}}" >
+                            {% else %}
+                            <!-- <img src="{% static 'registration/img/no-avatar.jpg' %}" class="img-fluid img-thumbnail" style="max-width: 100%; height: auto;" alt="..."> -->
+                            <img class="card-img-top img-fluid" src="{% static 'registration/img/no-avatar.jpg' %}" alt="Default">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h5 class="card-title">{{ profile.user.username }}</h5>
+                                <p class="card-text">{{ profile.bio | truncatechars:"100" }}</p>
+                                {% if profile.user.last_login %}
+                                    <p class="card-text"><small class="text-muted">Último ingreso: {{profile.user.last_login|date:'d-N-Y'}}</small></p>
+                                {% else %}
+                                    <p class="card-text"><small class="text-muted">Aún no ha ingresado a la aplicación</small></p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
