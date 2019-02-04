@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+# https://docs.djangoproject.com/en/2.0/ref/signals/#m2m-changed
+from django.db.models.signals import m2m_changed
 
 # Create your models here.
 
@@ -17,8 +19,25 @@ class Thread(models.Model):
     users = models.ManyToManyField(User, related_name='threads')
     messages = models.ManyToManyField(Message)
 
-# Desarrollo orientado por pruebas.
-# https://medium.freecodecamp.org/learning-to-test-with-python-997ace2d8abe
-# https://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas
-# https://code.tutsplus.com/tutorials/beginning-test-driven-development-in-python--net-30137
-# https://dzone.com/articles/tdd-python-5-minutes
+
+def messages_changed(sender, **kwargs):
+    # Recupera la instanaci del objeto que esta siendo modificado.
+    instance = kwargs.pop("instance", None)
+    # Recupera el tipo de acción que se esta haciendo sobre el objeto post_add o pre_add
+    action = kwargs.pop("action", None)
+    # Llaves de los objetos que estan siendo cargados
+    pk_set = kwargs.pop("pk_set", None)
+    print(instance, action, pk_set)
+
+    false_pk_set = set()
+    if action is "pre_add":
+        for msg_pk in pk_set:
+            msg = Message.objects.get(pk=msg_pk)
+            if (msg.user not in instance.users.all()):
+                print("ups! not register user {}".format(msg.user))
+                false_pk_set.add(msg_pk)
+
+    pk_set.difference_update(false_pk_set)
+
+
+m2m_changed.connect(messages_changed, sender=Thread.messages.through)
